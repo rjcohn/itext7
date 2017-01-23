@@ -552,6 +552,12 @@ public class AccessibleAttributesApplier {
 
     private static PdfName transformNumberingTypeToName(ListNumberingType numberingType, boolean isTagStructurePdf2) {
         switch (numberingType) {
+            case DISC:
+                return PdfName.Disc;
+            case CIRCLE:
+                return PdfName.Circle;
+            case SQUARE:
+                return PdfName.Square;
             case DECIMAL:
             case DECIMAL_LEADING_ZERO:
                 return PdfName.Decimal;
