@@ -46,14 +46,16 @@ package com.adobe.itext;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.utils.CompareTool;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.ClearPropertyValue;
 import com.itextpdf.layout.property.FloatPropertyValue;
 import com.itextpdf.layout.property.Property;
-import com.itextpdf.test.ExtendedITextTest;
+import com.itextpdf.test.ITextTest;
 import com.itextpdf.test.annotations.type.IntegrationTest;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -61,7 +63,7 @@ import org.junit.experimental.categories.Category;
 import java.io.IOException;
 
 @Category(IntegrationTest.class)
-public class FloatTest2 extends ExtendedITextTest {
+public class FloatTest2 extends ITextTest {
 
     public static final String imageFolder = "./src/test/resources/com/itextpdf/layout/FloatTest/";
     public static final String sourceFolder = "./src/test/resources/com/adobe/layout/FloatTest2/";
@@ -101,7 +103,7 @@ public class FloatTest2 extends ExtendedITextTest {
         document.add(new Paragraph(text));
         document.close();
 
-        //Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
+        Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
     }
 
     @Test
@@ -124,7 +126,7 @@ public class FloatTest2 extends ExtendedITextTest {
         document.add(new Paragraph(text));
         document.close();
 
-        //Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
+        Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
     }
 
     @Test
@@ -147,7 +149,7 @@ public class FloatTest2 extends ExtendedITextTest {
         document.add(new Paragraph(text));
         document.close();
 
-        //Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
+        Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
     }
 
     @Test
@@ -205,7 +207,7 @@ public class FloatTest2 extends ExtendedITextTest {
 
         document.close();
 
-        //Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
+        Assert.assertNull(new CompareTool().compareByContent(outFile, cmpFileName, destinationFolder, "diff"));
     }
 
 
