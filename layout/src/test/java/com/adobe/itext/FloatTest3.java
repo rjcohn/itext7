@@ -1,4 +1,4 @@
-package com.adobe.layout;
+package com.adobe.itext;
 
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
