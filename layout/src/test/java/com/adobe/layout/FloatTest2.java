@@ -40,7 +40,7 @@
     For more information, please contact iText Software Corp. at this
     address: sales@itextpdf.com
  */
-package com.adobe.itext;
+package com.adobe.layout;
 
 
 import com.itextpdf.io.image.ImageDataFactory;
