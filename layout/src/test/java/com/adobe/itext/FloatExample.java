@@ -18,21 +18,21 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public class FloatTest3 {
+public class FloatExample {
 
-	public static final String imageFolder = "layout/src/test/resources/com/adobe/itext/FloatTest3/";
+	public static final String imageFolder = "layout/src/test/resources/com/adobe/itext/FloatExample/";
 	public static final String IMAGE_1 = imageFolder + "1.png";
 	public static final String IMAGE_2 = imageFolder + "2.png";
 	public static final String IMAGE_3 = imageFolder + "3.png";
 	public static final String IMAGE_4 = imageFolder + "4.png";
-	public static final String DEST = "target/results/FloatTest3.pdf";
+	public static final String DEST = "target/results/FloatExample.pdf";
 
 	public static final float IMAGE_WIDTH = 200f;
 
 	public static void main(String args[]) throws IOException {
 		File file = new File(DEST);
 		file.getParentFile().mkdirs();
-		new FloatTest3().createPdf(DEST);
+		new FloatExample().createPdf(DEST);
 	}
 
 	public void createPdf(String dest) throws IOException {
