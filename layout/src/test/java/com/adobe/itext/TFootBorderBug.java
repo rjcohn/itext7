@@ -53,18 +53,21 @@ public class TFootBorderBug {
 				"and several other places."));
 
 		document.add(new Paragraph("\nThis one looks good:"));
-		document.add(createTable(false, false));
+		document.add(createTable(false, false, false));
 
 		document.add(new Paragraph("\nWhen footer background is gray, footer top border disappears.\n" +
 				"The cell height includes the border, but then the background is drawn over it.\n" +
 				"It was correct before I updated my branch\n" +
 				"(after a06ee1f4cf70bfb100dd913b804338279baae7e7 [a06ee1f])"));
-		document.add(createTable(false, true));
+		document.add(createTable(false, true, false));
+
+		document.add(new Paragraph("\nSimilar table without a footer. Last row has same formatting."));
+		document.add(createTable(false, true, true));
 
 		document.close();
 	}
 
-	private Table createTable(boolean boldHeader, boolean footerBackground) {
+	private Table createTable(boolean boldHeader, boolean footerBackground, boolean noFooter) {
 		// same with 2 rows of header and footer
 		// set border on header and footer
 		Table table = new Table(new float[3]);
@@ -75,26 +78,37 @@ public class TFootBorderBug {
 		}
 		for (int r = 0; r < 3; r++) {
 			for (int c = 0; c < 3; c++) {
-				table.addCell(new Cell().add(String.format("row %d col %d", r, c)).setBorder(Border.NO_BORDER));
+				Cell cell = new Cell().add(String.format("row %d col %d", r, c)).setBorder(Border.NO_BORDER);
+				if (noFooter && r == 2)
+					cell.setBold()
+							.setBorderTop(new SolidBorder(10))
+							.setBorderBottom(new SolidBorder(1))
+							.setBackgroundColor(Color.LIGHT_GRAY);
+				table.addCell(cell);
 			}
 		}
-		for (int r = 0; r < 1; r++) {
-			for (int c = 0; c < 3; c++) {
-				table.addFooterCell(new Cell().add(String.format("footer row %d col %d", r, c)).setBorder(Border.NO_BORDER));
+		if (!noFooter) {
+			for (int r = 0; r < 1; r++) {
+				for (int c = 0; c < 3; c++) {
+					table.addFooterCell(new Cell().add(String.format("footer row %d col %d", r, c)).setBorder(Border.NO_BORDER));
+				}
 			}
 		}
+
 		// must add cells to header and footer to create them
 		table.getHeader()
 				.setBorderTop(new SolidBorder(2))
 				.setBorderBottom(new SolidBorder(1));
 		if (boldHeader)
 			table.getHeader().setBold();
-		table.getFooter()
-				.setBold()
-				.setBorderTop(new SolidBorder(10))
-				.setBorderBottom(new SolidBorder(1));
-		if (footerBackground)
-			table.getFooter().setBackgroundColor(Color.LIGHT_GRAY);
+		if (!noFooter) {
+			table.getFooter()
+					.setBold()
+					.setBorderTop(new SolidBorder(10))
+					.setBorderBottom(new SolidBorder(1));
+			if (footerBackground)
+				table.getFooter().setBackgroundColor(Color.LIGHT_GRAY);
+		}
 
 		return table;
 	}
