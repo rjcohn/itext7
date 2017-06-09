@@ -66,8 +66,8 @@ import java.io.IOException;
 public class FloatTest2 extends ITextTest {
 
     public static final String imageFolder = "./src/test/resources/com/itextpdf/layout/FloatTest/";
-    public static final String sourceFolder = "./src/test/resources/com/adobe/layout/FloatTest2/";
-    public static final String destinationFolder = "./target/test/com/adobe/layout/FloatTest2/";
+    public static final String sourceFolder = "./src/test/resources/com/adobe/itext/FloatTest2/";
+    public static final String destinationFolder = "./target/test/com/adobe/itext/FloatTest2/";
 
     private static final String text =
             "Video provides a powerful way to help you prove your point. When you click Online Video, you can paste in the embed code for the video you want to add. You can also type a keyword to search online for the video that best fits your document. " +

@@ -20,7 +20,7 @@ import java.net.MalformedURLException;
 
 public class FloatTest3 {
 
-	public static final String imageFolder = "layout/src/test/resources/com/adobe/layout/FloatTest3/";
+	public static final String imageFolder = "layout/src/test/resources/com/adobe/itext/FloatTest3/";
 	public static final String IMAGE_1 = imageFolder + "1.png";
 	public static final String IMAGE_2 = imageFolder + "2.png";
 	public static final String IMAGE_3 = imageFolder + "3.png";
