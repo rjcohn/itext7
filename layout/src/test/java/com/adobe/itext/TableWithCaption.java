@@ -1,0 +1,83 @@
+package com.adobe.itext;
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfName;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.*;
+
+import java.io.File;
+import java.io.IOException;
+
+// Three different bugs (described in the output)
+public class TableWithCaption {
+
+	private static final String DEST = "target/results/TableWithCaption.pdf";
+
+	public static void main(String args[]) throws IOException {
+		File file = new File(DEST);
+		file.getParentFile().mkdirs();
+		new TableWithCaption().createPdf(DEST);
+	}
+
+	private void createPdf(String dest) throws IOException {
+		//Initialize PDF writer
+		PdfWriter writer = new PdfWriter(dest);
+
+		//Initialize PDF document
+		PdfDocument pdf = new PdfDocument(writer);
+
+		// Initialize document
+		Document document = new Document(pdf);
+		pdf.setTagged();
+		Paragraph p;
+
+		p = new Paragraph("We try to create a Table with a Caption by creating a Div with two children: " +
+				"a Div that is a caption and a Table. " +
+				"To tag this correctly, I set the outer Div role to Table, the inner Div to Caption, and the " +
+				"Table to null." +
+				"The table contents don't get tagged correctly. " +
+				"When the role is set to null, the Table tries to turn off tagging. " +
+				"This means that there are no TR tags. " +
+				"(But there are still TD tags because Cells don't check if their parent table is tagged.)" +
+				"One fix would be to check if the Table's parent is tagged (or any parent).");
+		document.add(p);
+
+		p = new Paragraph("This table is tagged correctly.");
+		document.add(p);
+		document.add(createTable(false));
+
+		p = new Paragraph("This table has a caption and is tagged incorrectly.");
+		document.add(p);
+		document.add(createTable(true));
+
+		document.close();
+	}
+
+	private IBlockElement createTable(boolean useCaption) {
+		Table table = new Table(new float[3])
+				.setMarginTop(10)
+				.setMarginBottom(10);
+		for (int r = 0; r < 2; r++) {
+			for (int c = 0; c < 3; c++) {
+				String content = r + "," + c;
+				Cell cell = new Cell();
+				cell.add(content);
+				table.addCell(cell);
+			}
+		}
+		if (useCaption) {
+			Div div = new Div();
+			div.setRole(PdfName.Table);
+			Paragraph p = new Paragraph("Caption");
+			p.setRole(null);
+			Div caption = new Div().add(p);
+			caption.setRole(PdfName.Caption);
+			div.add(caption);
+			table.setRole(null);
+			div.add(table);
+			return div;
+		} else
+			return table;
+	}
+}
