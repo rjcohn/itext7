@@ -5,6 +5,7 @@ import com.itextpdf.kernel.pdf.PdfName;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.property.TextAlignment;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,16 @@ public class TableWithCaption {
 		document.add(p);
 		document.add(createTable(false));
 
-		p = new Paragraph("This table has a caption and is tagged incorrectly.");
+		p = new Paragraph("This table has a caption and is tagged incorrectly. " +
+				"Also note that (I believe) the caption is centered incorrectly. " +
+				"The width of the div is computed to be the full width of the column, " +
+				"so the text is centered in the column. " +
+				"The width should be computed to be the width of the widest element (the table). " +
+				"If this were done, then the caption would be centered on the table. " +
+				"I saw this before when looking at widths. " +
+				"The text width is initialized to be the full width so that it's place correctly " +
+				"for various text alignments. " +
+				"It would be better to calculate the width and then place the text.");
 		document.add(p);
 		document.add(createTable(true));
 
@@ -71,6 +81,7 @@ public class TableWithCaption {
 			div.setRole(PdfName.Table);
 			Paragraph p = new Paragraph("Caption");
 			p.setRole(null);
+			p.setTextAlignment(TextAlignment.CENTER).setBold();
 			Div caption = new Div().add(p);
 			caption.setRole(PdfName.Caption);
 			div.add(caption);
