@@ -6,6 +6,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
@@ -26,13 +27,18 @@ public class FloatExample {
 		new FloatExample().createPdf(DEST);
 	}
 
+	// defined range is 0..3
+	private static final int FIRST_IMAGE = 1;
+	private static final int LAST_IMAGE = 2;
+
 	private static final Color IMAGE_BORDER_COLOR = Color.LIGHT_GRAY;
 	private static final float BORDER_MARGIN = 5f;
 	private static final float IMAGE_BORDER_WIDTH = 5f;
 	private static final float DIV_BORDER_WIDTH = 1f;
 
-	private static final UnitValue IMAGE_WIDTH = new UnitValue(UnitValue.PERCENT, 33f);
-	private static final UnitValue DIV_IMAGE_WIDTH = new UnitValue(UnitValue.POINT, 150f);
+	private static final UnitValue OUTER_WIDTH = new UnitValue(UnitValue.PERCENT, 60f);
+	//private static final UnitValue DIV_IMAGE_WIDTH = new UnitValue(UnitValue.POINT, 150f);
+	private static final UnitValue DIV_IMAGE_WIDTH = new UnitValue(UnitValue.PERCENT, 100f);
 
 	private void createPdf(String dest) throws IOException {
 		//Initialize PDF writer
@@ -45,48 +51,120 @@ public class FloatExample {
 		Document document = new Document(pdf);
 		pdf.setTagged();
 
-//		addContent(document, false, false, ClearPropertyValue.BOTH);
+		// divWidthProperty, divWidth are n/a when not wrapping image in a div
+
+		document.add(new Paragraph("Actual width of image -- no explicit width, no max.\n"));
+		addContent(document, false, 0, null, 0, null, ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		document.add(new Paragraph("Width < actual width.\n"));
+		addContent(document, false, Property.WIDTH, new UnitValue(UnitValue.PERCENT, 30f), 0, null, ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		// w/o stashed fixes, allocated width for float is actual width, not max width
+		document.add(new Paragraph("Max width < actual width.\n"));
+		addContent(document, false, Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 30f), 0, null, ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		// w/o stashed fixes, allocated width for float is actual width, not max width
+		document.add(new Paragraph("Max width > actual width.\n"));
+		addContent(document, false, Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 60f), 0, null, ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		// Image wrapped in div
+
+		// Width of Paragraph inside Div if width of parent
+		document.add(new Paragraph("No explicit width or max: Non-floating text width is parent width.\n"));
+		addContent(document, true, 0, null, 0, null, ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		document.add(new Paragraph("Bug: Non-floating text width is parent width (limited by max).\n"));
+		addContent(document, true, Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 100f),
+				Property.WIDTH, new UnitValue(UnitValue.PERCENT, 30f), ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		// w/o stashed fixes, allocated width for float is actual width, not max width
+		document.add(new Paragraph("Max width < actual width.\n"));
+		addContent(document, true, Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 100f),
+				Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 30f), ClearPropertyValue.BOTH);
+		document.add(new AreaBreak());
+
+		// w/o stashed fixes, allocated width for float is actual width, not max width
+		document.add(new Paragraph("Max width > actual width.\n"));
+		addContent(document, true, Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 100f),
+				Property.MAX_WIDTH, new UnitValue(UnitValue.PERCENT, 60f), ClearPropertyValue.BOTH);
+		//document.add(new AreaBreak());
+
+//		// known float bug: image 4 should float to next page but doesn't when width = 60%
+//		addContent(document, false, false, false, ClearPropertyValue.BOTH);
+//		document.add(new ArezaBreak());
+//		// 2: calculated width for floats is 0%, should be actual width of image
+//		addContent(document, false, true, false, ClearPropertyValue.BOTH);
 //		document.add(new AreaBreak());
-//		addContent(document, true, false, ClearPropertyValue.BOTH);
+//		addContent(document, false, false, false, ClearPropertyValue.NONE);
 //		document.add(new AreaBreak());
-		addContent(document, false, true, ClearPropertyValue.BOTH);
+//		addContent(document, false, true, false, ClearPropertyValue.NONE);
 //		document.add(new AreaBreak());
-//		addContent(document, true, true, ClearPropertyValue.BOTH);
+//		// 3: overflow because width w/o float doesn't account for border/padding
+//		addContent(document, true, false, false, ClearPropertyValue.BOTH);
 //		document.add(new AreaBreak());
-//		addContent(document, false, ClearPropertyValue.NONE);
+//		// 3: overflow same reason (image width), but also 1: div max_width ignored because available width infinity
+//		addContent(document, true, false, true, ClearPropertyValue.BOTH);
 //		document.add(new AreaBreak());
-//		addContent(document, true, ClearPropertyValue.NONE);
+//		// correct - div width is set and wider than actual image, div height matches image height + caption
+//		addContent(document, true, true, false, ClearPropertyValue.BOTH);
+//		document.add(new AreaBreak());
+		// 1: same as before - div max_width ignored. however, image max_width > actual width
+//		addContent(document, true, true, true, ClearPropertyValue.BOTH);
+//		document.add(new AreaBreak());
+//		addContent(document, true, false, false, ClearPropertyValue.NONE);
+//		document.add(new AreaBreak());
+//		addContent(document, true, false, true, ClearPropertyValue.NONE);
+//		document.add(new AreaBreak());
+//		addContent(document, true, true, false, ClearPropertyValue.NONE);
+//		document.add(new AreaBreak());
+//		addContent(document, true, true, true, ClearPropertyValue.NONE);
 
 		document.close();
 	}
 
-	private void addContent(Document document, boolean maxWidth, boolean wrapImages, ClearPropertyValue clearValue)
+	private void addContent(Document document, boolean wrapImages,
+	                        int imageWidthProperty, UnitValue imageWidth,
+	                        int divWidthProperty, UnitValue divWidth,
+	                        ClearPropertyValue clearValue)
 			throws MalformedURLException {
 
 		ImageProperties[] images = new ImageProperties[4];
-		int widthProperty = maxWidth ? Property.WIDTH : Property.WIDTH;
-		images[0] = new ImageProperties(FloatPropertyValue.NONE, clearValue, HorizontalAlignment.CENTER, IMAGE_WIDTH);
-		images[1] = new ImageProperties(FloatPropertyValue.NONE, clearValue, HorizontalAlignment.CENTER, IMAGE_WIDTH);
-		images[2] = new ImageProperties(FloatPropertyValue.RIGHT, clearValue, HorizontalAlignment.CENTER, IMAGE_WIDTH);
-		images[3] = new ImageProperties(FloatPropertyValue.RIGHT, clearValue, HorizontalAlignment.CENTER, IMAGE_WIDTH);
+		images[0] = new ImageProperties(FloatPropertyValue.NONE, clearValue, HorizontalAlignment.CENTER);
+		images[1] = new ImageProperties(FloatPropertyValue.NONE, clearValue, HorizontalAlignment.CENTER);
+		images[2] = new ImageProperties(FloatPropertyValue.RIGHT, clearValue, HorizontalAlignment.CENTER);
+		images[3] = new ImageProperties(FloatPropertyValue.RIGHT, clearValue, HorizontalAlignment.CENTER);
 		Paragraph paragraph = new Paragraph()
 				.add("Four images followed by two paragraphs.\n");
-		if (wrapImages)
-			paragraph.add("Each image is wrapped in a div.\n");
-		String elName = wrapImages ? "div" : "image";
-		paragraph.add("All " + elName + "s specify CLEAR = " + clearValue + ", " +
-				(maxWidth ? "MAX_WIDTH" : "WIDTH") + "= " + IMAGE_WIDTH + ".\n");
-		if (wrapImages)
-			paragraph.add("All images specify MAX_WIDTH = " + DIV_IMAGE_WIDTH + ".\n");
-
-		for (int i = 1; i < images.length; i++) {
-			paragraph.add(elName + " " + (i) + ": " + images[i] + "\n");
+		if (wrapImages) {
+			String s = "Each image is wrapped in a div.\n";
+			s += "All divs specify CLEAR = " + clearValue;
+			if (divWidthProperty > 0)
+				s += ", " + ((divWidthProperty == Property.WIDTH) ? "WIDTH" : "MAX_WIDTH") + "= " + divWidth;
+			if (imageWidthProperty > 0)
+				s += ".\nAll images specify " + ((imageWidthProperty == Property.WIDTH) ? "WIDTH" : "MAX_WIDTH") + " = " + imageWidth;
+			paragraph.add(s + ".\n");
+		}
+		else {
+			String s = "All images specify CLEAR = " + clearValue;
+			if (imageWidthProperty > 0)
+				s += ", " + ((imageWidthProperty == Property.WIDTH) ? "WIDTH" : "MAX_WIDTH") + "= " + imageWidth;
+			paragraph.add(s + ".\n");
+		}
+		for (int i = FIRST_IMAGE; i <= LAST_IMAGE; i++) {
+			paragraph.add((wrapImages ? "Div" : "Image") + " " + (i) + ": " + images[i] + "\n");
 		}
 		document.add(paragraph);
 
-		for (int i = 1; i < images.length; i++) {
+		for (int i = FIRST_IMAGE; i <= LAST_IMAGE; i++) {
 			Image image = new Image(ImageDataFactory.create(String.format(IMAGE_SRC, i + 1)))
-					.setBorder(new SolidBorder(IMAGE_BORDER_COLOR, IMAGE_BORDER_WIDTH));
+					.setBorder(new SolidBorder(IMAGE_BORDER_COLOR, IMAGE_BORDER_WIDTH))
+					.setHorizontalAlignment(images[i].horizontalAlignment);
 			if (wrapImages) {
 				Div div = new Div()
 						.setBorder(new SolidBorder(DIV_BORDER_WIDTH))
@@ -94,16 +172,20 @@ public class FloatExample {
 				div.setHorizontalAlignment(images[i].horizontalAlignment);
 				div.setProperty(Property.CLEAR, images[i].clearPropertyValue);
 				div.setProperty(Property.FLOAT, images[i].floatPropertyValue);
-				div.setProperty(widthProperty, images[i].width);
-				image.setProperty(widthProperty, DIV_IMAGE_WIDTH);
+				if (divWidthProperty > 0)
+					div.setProperty(divWidthProperty, divWidth);
+				if (imageWidthProperty > 0)
+					image.setProperty(imageWidthProperty, imageWidth);
 				div.add(image);
+				div.add(new Paragraph("Figure " + i + ": This is longer text that wraps")
+						.setTextAlignment(TextAlignment.CENTER)).setBold();
 				document.add(div);
 			} else {
 				image.setMargins(BORDER_MARGIN, 0, BORDER_MARGIN, BORDER_MARGIN);
-				image.setHorizontalAlignment(images[i].horizontalAlignment);
 				image.setProperty(Property.CLEAR, images[i].clearPropertyValue);
 				image.setProperty(Property.FLOAT, images[i].floatPropertyValue);
-				image.setProperty(widthProperty, images[i].width);
+				if (imageWidthProperty > 0)
+					image.setProperty(imageWidthProperty, imageWidth);
 				document.add(image);
 			}
 		}
@@ -117,18 +199,16 @@ public class FloatExample {
 		FloatPropertyValue floatPropertyValue;
 		ClearPropertyValue clearPropertyValue;
 		HorizontalAlignment horizontalAlignment;
-		UnitValue width;
 
 		ImageProperties(FloatPropertyValue floatPropertyValue, ClearPropertyValue clearPropertyValue,
-		                HorizontalAlignment horizontalAlignment, UnitValue width) {
+		                HorizontalAlignment horizontalAlignment) {
 			this.floatPropertyValue = floatPropertyValue;
 			this.clearPropertyValue = clearPropertyValue;
 			this.horizontalAlignment = horizontalAlignment;
-			this.width = width;
 		}
 
 		public String toString() {
-			return "float="+floatPropertyValue + " clear="+clearPropertyValue + " horiz_align="+horizontalAlignment;
+			return "float="+floatPropertyValue + ", clear="+clearPropertyValue + ", horiz_align="+horizontalAlignment;
 		}
 	}
 }
