@@ -139,8 +139,9 @@ public class FloatExample {
 		images[1] = new ImageProperties(FloatPropertyValue.NONE, clearValue, HorizontalAlignment.CENTER);
 		images[2] = new ImageProperties(FloatPropertyValue.RIGHT, clearValue, HorizontalAlignment.CENTER);
 		images[3] = new ImageProperties(FloatPropertyValue.RIGHT, clearValue, HorizontalAlignment.CENTER);
+		int nImages = LAST_IMAGE - FIRST_IMAGE;
 		Paragraph paragraph = new Paragraph()
-				.add("Four images followed by two paragraphs.\n");
+				.add(nImages + " images followed by 2 paragraphs.\n");
 		if (wrapImages) {
 			String s = "Each image is wrapped in a div.\n";
 			s += "All divs specify CLEAR = " + clearValue;
