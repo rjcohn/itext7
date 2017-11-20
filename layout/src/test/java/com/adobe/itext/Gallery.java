@@ -44,7 +44,8 @@ public class Gallery {
 		Div gallery = new Div()
 				.setHorizontalAlignment(HorizontalAlignment.CENTER);
 		for (int i = 0; i < 4; i++) {
-			Div item = createItem(i);
+			FloatPropertyValue floatValue = (i < 2) ? FloatPropertyValue.NONE : FloatPropertyValue.LEFT;
+			Div item = createItem(i, floatValue);
 			gallery.add(item);
 		}
 		document.add(gallery);
@@ -55,17 +56,18 @@ public class Gallery {
 		document.close();
 	}
 
-	private Div createItem(int i) throws IOException {
+	private Div createItem(int i, FloatPropertyValue floatValue) throws IOException {
 		Div div = new Div()
 				//item.setWidth(100);
 				;
 		div.setRole(PdfName.Figure);
-		div.setProperty(Property.FLOAT, FloatPropertyValue.LEFT);
+		div.setProperty(Property.FLOAT, floatValue);
 
 		String url = String.format(IMAGE_SRC, i % N_IMAGES + 1);
 		Image img = new Image(ImageDataFactory.create(url))
 				.setWidthPercent(100)
 				.setMaxHeight(50);
+		img.setRole(null);
 		div.add(img);
 
 		Div caption = new Div();
