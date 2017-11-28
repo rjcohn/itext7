@@ -4,6 +4,7 @@ import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfName;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.tagging.StandardRoles;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
@@ -60,20 +61,20 @@ public class Gallery {
 		Div div = new Div()
 				//item.setWidth(100);
 				;
-		div.setRole(PdfName.Figure);
+		div.getAccessibilityProperties().setRole(StandardRoles.FIGURE);
 		div.setProperty(Property.FLOAT, floatValue);
 
 		String url = String.format(IMAGE_SRC, i % N_IMAGES + 1);
 		Image img = new Image(ImageDataFactory.create(url))
-				.setWidthPercent(100)
+				.setWidth(UnitValue.createPercentValue(100))
 				.setMaxHeight(50);
-		img.setRole(null);
+		img.getAccessibilityProperties().setRole(null);
 		div.add(img);
 
 		Div caption = new Div();
-		caption.setRole(PdfName.Caption);
+		caption.getAccessibilityProperties().setRole(StandardRoles.CAPTION);
 		Paragraph captionText = new Paragraph("Image " + i);
-		captionText.setRole(null);
+		captionText.getAccessibilityProperties().setRole(null);
 		caption.add(captionText);
 		div.add(caption);
 

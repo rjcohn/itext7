@@ -12,7 +12,7 @@
 package com.adobe.itext;
 
 import com.itextpdf.io.font.FontConstants;
-import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
@@ -32,7 +32,6 @@ import com.itextpdf.layout.property.TabAlignment;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -137,7 +136,7 @@ public class HeaderFooterExample {
 					.setFontSize(FONT_SIZE)
 					.add(p)
 					.close();
-			canvas.setStrokeColor(Color.BLACK)
+			canvas.setStrokeColor(ColorConstants.BLACK)
 					.setLineWidth(0.5f)
 					.moveTo(rect.getLeft(), rect.getBottom())
 					.lineTo(rect.getRight(), rect.getBottom())

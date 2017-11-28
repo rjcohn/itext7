@@ -1,11 +1,12 @@
 package com.adobe.itext;
 
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
@@ -31,7 +32,7 @@ public class FloatExample {
 	private static final int FIRST_IMAGE = 1;
 	private static final int LAST_IMAGE = 2;
 
-	private static final Color IMAGE_BORDER_COLOR = Color.LIGHT_GRAY;
+	private static final Color IMAGE_BORDER_COLOR = ColorConstants.LIGHT_GRAY;
 	private static final float BORDER_MARGIN = 5f;
 	private static final float IMAGE_BORDER_WIDTH = 5f;
 	private static final float DIV_BORDER_WIDTH = 1f;

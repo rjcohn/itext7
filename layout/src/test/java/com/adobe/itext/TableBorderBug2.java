@@ -1,13 +1,13 @@
 package com.adobe.itext;
 
-import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
-import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.ListNumberingType;
 
@@ -88,15 +88,15 @@ public class TableBorderBug2 {
 		Style cellStyle = new Style();
 		cellStyle.setBorderLeft(Border.NO_BORDER)
 				.setBorderRight(Border.NO_BORDER)
-				.setBorderTop(new SolidBorder(Color.BLUE, 1))
-				.setBorderBottom(new SolidBorder(Color.BLUE, 1));
+				.setBorderTop(new SolidBorder(ColorConstants.BLUE, 1))
+				.setBorderBottom(new SolidBorder(ColorConstants.BLUE, 1));
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 5; c++) {
 				// BUG: If content is added in pieces with 2 add() calls, text is wrapped at add boundary
 				String content = r + "," + c;
 				Cell cell = new Cell();
 				if (useMultipleAdds) {
-					cell.add(content);
+					cell.add(new Paragraph(content));
 					content = "";
 				}
 				if (useStyle) {
@@ -104,8 +104,8 @@ public class TableBorderBug2 {
 				} else {
 					cell.setBorderLeft(Border.NO_BORDER)
 							.setBorderRight(Border.NO_BORDER)
-							.setBorderTop(new SolidBorder(Color.BLUE, 1))
-							.setBorderBottom(new SolidBorder(Color.BLUE, 1));
+							.setBorderTop(new SolidBorder(ColorConstants.BLUE, 1))
+							.setBorderBottom(new SolidBorder(ColorConstants.BLUE, 1));
 				}
 				if (c == 4) {
 					if (r == 4)
@@ -113,7 +113,7 @@ public class TableBorderBug2 {
 					else
 						content += " some more text";
 				}
-				cell.add(content);
+				cell.add(new Paragraph(content));
 				if (r == 0)
 					table.addHeaderCell(cell);
 				else
@@ -122,8 +122,8 @@ public class TableBorderBug2 {
 		}
 		table.getHeader()
 				.setBold()
-				.setBorderTop(new SolidBorder(Color.BLUE, 1))
-				.setBorderBottom(new SolidBorder(Color.BLUE, 1));
+				.setBorderTop(new SolidBorder(ColorConstants.BLUE, 1))
+				.setBorderBottom(new SolidBorder(ColorConstants.BLUE, 1));
 
 		return table;
 	}

@@ -3,6 +3,7 @@ package com.adobe.itext;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfName;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.tagging.StandardRoles;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.TextAlignment;
@@ -72,20 +73,20 @@ public class TableWithCaption {
 			for (int c = 0; c < 3; c++) {
 				String content = r + "," + c;
 				Cell cell = new Cell();
-				cell.add(content);
+				cell.add(new Paragraph(content));
 				table.addCell(cell);
 			}
 		}
 		if (useCaption) {
 			Div div = new Div();
-			div.setRole(PdfName.Table);
+			div.getAccessibilityProperties().setRole(StandardRoles.TABLE);
 			Paragraph p = new Paragraph("Caption");
-			p.setRole(null);
+			p.getAccessibilityProperties().setRole(null);
 			p.setTextAlignment(TextAlignment.CENTER).setBold();
 			Div caption = new Div().add(p);
-			caption.setRole(PdfName.Caption);
+			caption.getAccessibilityProperties().setRole(StandardRoles.CAPTION);
 			div.add(caption);
-			table.setRole(null);
+			table.getAccessibilityProperties().setRole(null);
 			div.add(table);
 			return div;
 		} else

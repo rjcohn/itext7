@@ -4,7 +4,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
-import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -52,7 +52,7 @@ public class TableBorderBug {
 				.setMarginBottom(10);
 		for (int r = 0; r < 2; r++) {
 			for (int c = 0; c < 2; c++) {
-				Cell cell = new Cell().add(r + "," + c);
+				Cell cell = new Cell().add(new Paragraph(r + "," + c));
 				if (r == 0)
 					table.addHeaderCell(cell);
 				else

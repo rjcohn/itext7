@@ -1,11 +1,11 @@
 package com.adobe.itext;
 
-import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -73,24 +73,27 @@ public class TFootBorderBug {
 		Table table = new Table(new float[3]);
 		for (int r = 0; r < 1; r++) {
 			for (int c = 0; c < 3; c++) {
-				table.addHeaderCell(new Cell().add(String.format("header row %d col %d", r, c)).setBorder(Border.NO_BORDER).setBold());
+				table.addHeaderCell(new Cell().add(new Paragraph(String.format("header row %d col %d", r, c)))
+						.setBorder(Border.NO_BORDER).setBold());
 			}
 		}
 		for (int r = 0; r < 3; r++) {
 			for (int c = 0; c < 3; c++) {
-				Cell cell = new Cell().add(String.format("row %d col %d", r, c)).setBorder(Border.NO_BORDER);
+				Cell cell = new Cell().add(new Paragraph(String.format("row %d col %d", r, c)))
+						.setBorder(Border.NO_BORDER);
 				if (noFooter && r == 2)
 					cell.setBold()
 							.setBorderTop(new SolidBorder(10))
 							.setBorderBottom(new SolidBorder(1))
-							.setBackgroundColor(Color.LIGHT_GRAY);
+							.setBackgroundColor(ColorConstants.LIGHT_GRAY);
 				table.addCell(cell);
 			}
 		}
 		if (!noFooter) {
 			for (int r = 0; r < 1; r++) {
 				for (int c = 0; c < 3; c++) {
-					table.addFooterCell(new Cell().add(String.format("footer row %d col %d", r, c)).setBorder(Border.NO_BORDER));
+					table.addFooterCell(new Cell().add(new Paragraph(String.format("footer row %d col %d", r, c)))
+							.setBorder(Border.NO_BORDER));
 				}
 			}
 		}
@@ -107,7 +110,7 @@ public class TFootBorderBug {
 					.setBorderTop(new SolidBorder(10))
 					.setBorderBottom(new SolidBorder(1));
 			if (footerBackground)
-				table.getFooter().setBackgroundColor(Color.LIGHT_GRAY);
+				table.getFooter().setBackgroundColor(ColorConstants.LIGHT_GRAY);
 		}
 
 		return table;
